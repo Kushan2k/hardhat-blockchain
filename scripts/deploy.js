@@ -15,9 +15,9 @@ async function main() {
    //attact the contract
    const FundMe = contract.attach(address)
 
-   const count = await FundMe.donetionCount()
+   const owner = await FundMe.viewOwner()
 
-   console.log(`owner is ${count}`)
+   console.log(`owner is ${owner}`)
 }
 
 main()
