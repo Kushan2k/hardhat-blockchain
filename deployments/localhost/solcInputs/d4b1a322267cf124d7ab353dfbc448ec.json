@@ -1,0 +1,35 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/FundMe.sol": {
+      "content": "\r\n// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.9;\r\n\r\ncontract FundMe{\r\n\r\n     address payable  private owner;\r\n     mapping (address=>uint256) private donations;\r\n     uint256 private donetion_count;\r\n\r\n     event Doneted(address sender,uint256 amount);\r\n     event Withdrawed(uint256 timestamp);\r\n     \r\n     \r\n\r\n     constructor(){\r\n         owner=payable(msg.sender); \r\n         donetion_count=0;\r\n     }\r\n\r\n     function donate() external payable  {\r\n\r\n         donations[msg.sender]+=msg.value;\r\n         emit Doneted(msg.sender, msg.value);\r\n         donetion_count++;\r\n\r\n     }\r\n\r\n     modifier onlyOwner{\r\n\r\n         require(payable(msg.sender)==owner,\"You are not the owner\");\r\n         _;\r\n     }\r\n\r\n     function withdraw() external payable onlyOwner{\r\n         owner.transfer(address(this).balance);\r\n     }\r\n\r\n     function donetionCount() public view returns(uint256){\r\n         return donetion_count;\r\n     }\r\n\r\n     function getDonetions(address from) external view returns(uint256){\r\n         return donations[from];\r\n     }\r\n\r\n     function viewOwner() external view returns(address o){\r\n         o=owner;\r\n     }\r\n}"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}
