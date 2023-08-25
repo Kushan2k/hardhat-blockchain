@@ -8,19 +8,16 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
    const { deploy } = deployments
 
    if (getActiveChain(network.name)) {
-      console.log("Deploying mocks")
+      console.log("Deploying Mocks")
       const ag = await deploy("MockV3Aggregator", {
          from: deployer,
          log: true,
          args: [DECIMALS, INIT_ETH_VALUE],
       })
-      await deploy("FundMe", {
-         from: deployer,
-         args: [ag.address],
-         log: true,
-      })
+
+      console.log("Mocks Deployed!")
       console.log("--------------------------------------")
    }
 }
 
-module.exports.tags = ["mock", "all"]
+module.exports.tags = ["mock"]
