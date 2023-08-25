@@ -1,15 +1,6 @@
 const hre = require("hardhat")
 
-async function main() {
-   const contract = await hre.ethers.getContractFactory("FundMe")
-
-   //deploying contract
-   console.log("Deploying FundMe...")
-   const FundMe = await contract.deploy()
-   const address = await FundMe.getAddress()
-
-   console.log("FundMe deployed to:", address)
-}
+async function main() {}
 
 main()
    .then(() => {

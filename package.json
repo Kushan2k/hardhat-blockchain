@@ -6,6 +6,7 @@
   "author": "kushan2k <kushangayantha001@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@chainlink/contracts": "^0.6.1",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.0",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
@@ -28,5 +29,9 @@
   },
   "dependencies": {
     "ethers": "^6.7.1"
+  },
+  "scripts": {
+    "compile":"yarn hardhat compile",
+    "run:localhost":"yarn hardhat deploy --network localhost"
   }
 }

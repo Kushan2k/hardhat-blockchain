@@ -1,11 +1,23 @@
+const { priceFeedAddress, getActiveChain } = require("../helder.hardhat.config")
+const { network } = require("hardhat")
+
 module.exports = async ({ getNamedAccounts, deployments }) => {
+   if (getActiveChain(network.name)) {
+      console.log("Development chains, skipping....")
+      return
+   }
+
    const { deploy } = deployments
    const { deployer } = await getNamedAccounts()
 
-   console.log(deployer)
+   //get the price feed addres depending on the chain id
+   const priceFeed = priceFeedAddress[network.config.chainId]["address"]
 
-   await deploy("FundMe", {
+   const FundMe = await deploy("FundMe", {
       from: deployer,
-      logs: true,
+      args: [priceFeed],
+      log: true,
    })
 }
+
+module.exports.tags = ["all", "deploy"]

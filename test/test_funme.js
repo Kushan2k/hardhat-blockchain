@@ -1,36 +1,30 @@
-const { ethers, network } = require("hardhat")
+const { ethers, network, deployments, getNamedAccounts } = require("hardhat")
 const { assert } = require("chai")
+const { getActiveChain } = require("../helder.hardhat.config")
 
 describe("test deploy fundme", async () => {
-   if (network.config.chainId === 1337) {
-      return
+   if (!getActiveChain(network.name)) {
+      console.log("Skipping test")
+      describe.skip
    }
+   await deployments.fixture(["all"])
 
-   let FundMe, factory
-   const address = "0x618E91f76c173Fc15b5E2F430c324fF121F94A54"
+   let FundMe, deployer
+
    beforeEach(async () => {
-      factory = await ethers.getContractFactory("FundMe")
-      FundMe = factory.attach(address)
+      deployer = (await getNamedAccounts()).deployer
+      FundMe = ethers.getContract("FundMe", deployer)
    })
 
    it("get donted count", async () => {
-      const expect = "0"
-      const count = await FundMe.donetionCount()
+      const expect = 0
 
-      // console.log(count)
+      const actual = await FundMe.donetionCount()
 
-      assert.equal(count.toString(), expect)
+      assert.equal(actual, expect)
    })
 
    it("get owner", async () => {
-      const ownerAddress = "0x669406ff143A2869D3709c888AF6eA15a419c498"
-
-      const contractOwner = await FundMe.viewOwner()
-
-      assert.equal(
-         contractOwner,
-         ownerAddress,
-         "you are not the owner of this contract"
-      )
+      assert.equal(FundMe.address, deployer)
    })
 })

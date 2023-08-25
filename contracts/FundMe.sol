@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
+import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+
 contract FundMe{
 
      address payable  private owner;
@@ -10,12 +13,17 @@ contract FundMe{
 
      event Doneted(address sender,uint256 amount);
      event Withdrawed(uint256 timestamp);
+
+     AggregatorV3Interface internal pricefeed;
      
      
 
-     constructor(){
+     constructor(address pricefeedAddress){
          owner=payable(msg.sender); 
          donetion_count=0;
+          pricefeed=AggregatorV3Interface(
+             pricefeedAddress
+         );
      }
 
      function donate() external payable  {
@@ -46,5 +54,17 @@ contract FundMe{
 
      function viewOwner() external view returns(address o){
          o=owner;
+     }
+
+     function getEthtoUSD() public view returns(int256){
+          (
+            /* uint80 roundID */,
+            int answer,
+            /*uint startedAt*/,
+            /*uint timeStamp*/,
+            /*uint80 answeredInRound*/
+        ) = pricefeed.latestRoundData();
+        int256 currentPriceinusd=answer/100000000;
+        return currentPriceinusd;
      }
 }

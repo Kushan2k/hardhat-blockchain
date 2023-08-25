@@ -12,17 +12,21 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-   solidity: "0.8.9",
+   solidity: {
+      compilers: [{ version: "0.8.9" }, { version: "0.8.0" }],
+   },
    networks: {
       sepolia: {
          url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
          accounts: [PRIVATE_KEY],
+         chainId: 11155111,
       },
       hardhat: {
          chainId: 1337,
       },
       localhost: {
          url: "http://127.0.0.1:8545/",
+         chainId: 1337,
       },
    },
    gasReporter: {
