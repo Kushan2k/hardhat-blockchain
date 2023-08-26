@@ -1,30 +1,37 @@
 const { ethers, network, deployments, getNamedAccounts } = require("hardhat")
-const { assert } = require("chai")
+const { assert, expect } = require("chai")
 const { getActiveChain } = require("../helder.hardhat.config")
 
 describe("test deploy fundme", async () => {
    if (!getActiveChain(network.name)) {
-      console.log("Skipping test")
-      describe.skip
+      console.log("Not a Development chain")
+      return
    }
-   await deployments.fixture(["all"])
+
+   if (network.name == "hardhat") {
+      console.log("Hardhat development chain detected!")
+      return
+   }
+
+   // await deployments.fixture(["all"])
 
    let FundMe, deployer
 
    beforeEach(async () => {
       deployer = (await getNamedAccounts()).deployer
-      FundMe = ethers.getContract("FundMe", deployer)
+      FundMe = await ethers.getContract("FundMe", deployer)
    })
 
    it("get donted count", async () => {
-      const expect = 0
+      const initinalCount = 1
+      const donetedCount = await FundMe.donetionCount()
 
-      const actual = await FundMe.donetionCount()
-
-      assert.equal(actual, expect)
+      expect(donetedCount).to.equal(initinalCount)
    })
 
    it("get owner", async () => {
-      assert.equal(FundMe.address, deployer)
+      const owner = await FundMe.viewOwner()
+
+      assert.equal(owner, deployer)
    })
 })
