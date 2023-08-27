@@ -4,19 +4,18 @@ const { getActiveChain } = require("../helder.hardhat.config")
 module.exports = async ({ getNamedAccounts, deployments }) => {
    const { deployer } = await getNamedAccounts()
 
-   const doneteAmount = ethers.parseEther("0.1")
+   const doneteAmount = ethers.parseEther("0.5")
 
    //get the deployed contract
-   const FundMe = await ethers.getContract("FundMe")
+   const FundMe = await ethers.getContract("FundMe", deployer)
 
    //donete 0.1 ether using the same account
    const tx = await FundMe.donate({
-      from: deployer,
       value: doneteAmount,
       log: true,
    })
    await tx.wait(1)
-   console.log(`0.1 ether doneted from ${deployer}`)
+   console.log(`0.5 ether doneted from ${deployer}`)
 
    const address = await FundMe.getAddress()
    //get the balance
